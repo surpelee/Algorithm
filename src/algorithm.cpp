@@ -281,3 +281,29 @@ bool Algorithm::patternMatching(string pattern, string value) {
     return false;
 }
 
+int Algorithm::longestValidParentheses(string s) {
+    stack<int> si;
+    si.push(-1);
+    int ans = 0;
+    for(int i = 0;i<s.size();++i){
+        if(si.top() == -1){
+            si.push(i);
+        }
+        else if(s[i] == ')'&&s[si.top()] == '('){
+            si.pop();
+            ans = max(ans,i - si.top());
+        }else
+            si.push(i);
+    }
+    return ans;
+}
+
+int Algorithm::maxScoreSightseeingPair(vector<int> &A) {
+    int ans = 0,tmp = A[0];
+    for(int i = 1;i<A.size();++i){
+        ans = max(ans,tmp + A[i] - i);
+        tmp = max(tmp,A[i] + i);
+    }
+    return ans;
+}
+
