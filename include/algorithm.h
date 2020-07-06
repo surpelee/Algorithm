@@ -89,6 +89,7 @@ public:
     bool patternMatching(string pattern, string value);//模式匹配
     int longestValidParentheses(string s);//最长有效括号
     int maxScoreSightseeingPair(vector<int>& A);//最佳观光组合
+    int uniquePathsWithObstacles(vector<vector<int>>& obstacleGrid);//不同路径2
 
 private:
     void CountPalin(const string& s,int l,int r);
