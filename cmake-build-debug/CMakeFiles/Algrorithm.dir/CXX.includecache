@@ -40,3 +40,9 @@ string
 include/algorithm.h
 /Users/surpeli/CLionProjects/Algorithm/include/algorithm.h
 
+/Users/surpeli/CLionProjects/Algorithm/src/algorithm.cpp
+iostream
+-
+../include/algorithm.h
+/Users/surpeli/CLionProjects/Algorithm/include/algorithm.h
+
