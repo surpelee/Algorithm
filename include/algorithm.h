@@ -90,8 +90,10 @@ public:
     int longestValidParentheses(string s);//最长有效括号
     int maxScoreSightseeingPair(vector<int>& A);//最佳观光组合
     int uniquePathsWithObstacles(vector<vector<int>>& obstacleGrid);//不同路径2
+    bool hasPathSum(TreeNode* root, int sum);//路径总和
 
 private:
+    bool back_hasPathSum(TreeNode *node, int sum, int ans);
     void CountPalin(const string& s,int l,int r);
     bool check_searchMatrix(vector<vector<int>>& matrix,int mid,int i,int j);
     TreeNode* back_sortedArrayToBST(vector<int>& nums,int l,int r);
@@ -101,7 +103,6 @@ private:
     void buildMaxHeap(vector<int>& a,int heapSize);
 private:
     int m_int;
-
 };
 
 #endif

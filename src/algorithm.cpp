@@ -332,6 +332,21 @@ int Algorithm::uniquePathsWithObstacles(vector<vector<int>> &obstacleGrid) {
     return dp[m - 1][n - 1];
 }
 
+bool Algorithm::hasPathSum(TreeNode *root, int sum) {
+    return back_hasPathSum(root,sum,0);
+}
+
+bool Algorithm::back_hasPathSum(TreeNode *node,int sum,int ans) {
+    if(node == nullptr)
+        return false;
+    ans += node->val;
+    if(!node->left&&!node->right&&ans == sum) return true;
+    if(back_hasPathSum(node->left,sum,ans) || back_hasPathSum(node->right,sum,ans))
+        return true;
+    ans -= node->val;
+    return false;
+}
+
 
 
 
