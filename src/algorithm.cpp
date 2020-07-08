@@ -347,6 +347,21 @@ bool Algorithm::back_hasPathSum(TreeNode *node,int sum,int ans) {
     return false;
 }
 
+vector<int> Algorithm::divingBoard(int shorter, int longer, int k) {
+    if(shorter == longer){
+        vector<int> ans;
+        if(k == 0) return ans;
+        ans.push_back(longer*k);
+        return  ans;
+    }
+    vector<int> ans(k + 1);
+    for(int i = 0;i <= k;++i){
+        int tmp = i*longer + shorter*(k - i);
+        ans[i] = tmp;
+    }
+    return ans;
+}
+
 
 
 

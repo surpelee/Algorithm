@@ -91,6 +91,7 @@ public:
     int maxScoreSightseeingPair(vector<int>& A);//最佳观光组合
     int uniquePathsWithObstacles(vector<vector<int>>& obstacleGrid);//不同路径2
     bool hasPathSum(TreeNode* root, int sum);//路径总和
+    vector<int> divingBoard(int shorter, int longer, int k);//跳水板
 
 private:
     bool back_hasPathSum(TreeNode *node, int sum, int ans);
