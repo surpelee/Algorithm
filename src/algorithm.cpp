@@ -362,12 +362,282 @@ vector<int> Algorithm::divingBoard(int shorter, int longer, int k) {
     return ans;
 }
 
+int Algorithm::respace(vector<string> &dictionary, string sentence) {
+    //递归失败
+    /*unordered_set<string> aSet;
+    int wordLen = 0;
+    for(const auto& s:dictionary) {
+        wordLen = max(wordLen,(int)s.size());
+        aSet.insert(s);
+    }
+    m_int = sentence.size();
+    back_respace(aSet,sentence,wordLen,0,0);
+    return m_int;*/
+    //动态规划
+    int n=sentence.size();
+    int dp[n+1];
+    dp[0]=0;
+    for(int i=0;i<n;++i){
+        dp[i+1]=dp[i]+1;
+        for(auto& word:dictionary){
+            if(word.size()<=i+1){
+                if(word==sentence.substr(i+1-word.size(),word.size()))
+                    dp[i+1]=min(dp[i+1],dp[i+1-word.size()]);
+            }
+        }
+    }
+    return dp[n];
+}
 
+void Algorithm::back_respace(unordered_set<string>& dictionary,string& sentence,int wordLen,int x,int num){
+    if(x >= sentence.size()){
+        m_int = min(m_int,num);
+        return;
+    }
+    for(int i = x + 1;i<=sentence.size();++i){
+        if(i - x > wordLen) {
+            back_respace(dictionary,sentence,wordLen,x + 1,num + 1);
+            return;
+        }
+        string tmp = sentence.substr(x,i - x);
+        if(dictionary.find(tmp) == dictionary.end()){
+            continue;
+        }
+        back_respace(dictionary,sentence,wordLen,i,num);
+    }
+}
 
+int Algorithm::maxProfit_freeze(vector<int> &prices) {
+    if(prices.empty()) return 0;
+    int sSize = prices.size();
+    vector<vector<int>> dp(sSize,vector<int>(2,0));
+    dp[0][0] = 0;
+    dp[0][1] = -prices[0];
+    int dp_pre = 0;//代表dp[i-2][0]
+    for(int i = 1;i<sSize;++i){
+        int tmp = dp[i-1][0];
+        dp[i][0] = max(dp[i-1][0],dp[i-1][1] + prices[i]);
+        dp[i][1] = max(dp[i-1][1],dp_pre - prices[i]);
+        dp_pre = tmp;
+    }
+    return dp[sSize - 1][0];
+}
 
+int Algorithm::maxProfit(vector<int> &prices) {
+    if(prices.empty()) return 0;
+    int iMin = INT_MAX,iMax = 0;
+    for(int i = 0;i<prices.size();++i){
+        iMax = max(iMax,prices[i] - iMin);
+        iMin = min(iMin,prices[i]);
+    }
+    return iMax;
+    /*if (prices.empty()) return 0;
+    int ans(0),profit(0),pre = prices[0];
+    for (int i = 1; i < prices.size(); ++i) {
+        if (pre > prices[i]) pre = prices[i];
+        else  profit = prices[i] - pre;
+        ans = ans > profit ? ans : profit;
+    }
+    return ans;*/
+}
 
+int Algorithm::maxProfit2(vector<int> &prices) {
+    if(prices.empty()) return 0;
+    int sSize = prices.size();
+    vector<vector<int>> dp(sSize,vector<int>(2,0));
+    dp[0][0] = 0;
+    dp[0][1] = -prices[0];
+    for(int i = 1;i<sSize;++i){
+        dp[i][0] = max(dp[i-1][0],dp[i-1][1] + prices[i]);
+        dp[i][1] = max(dp[i-1][1],dp[i-1][0] - prices[i]);
+    }
+    return dp[sSize - 1][0];
+}
 
+int Algorithm::maxProfit3(vector<int> &prices) {
+    if(prices.empty()) return 0;
+    int sSize = prices.size();
+    //vector<vector<vector<int>>> dp(sSize,vector<vector<int>>(2,vector<int>(2,0)));
+    int dp_1_0 = 0;
+    int dp_1_1 = -prices[0];
+    int dp_2_0 = 0;
+    int dp_2_1 = INT_MIN;
+    for(int i = 1;i<sSize;++i){
+        dp_2_0 = max(dp_2_0,dp_2_1 + prices[i]);
+        dp_2_1 = max(dp_2_1,dp_1_0 - prices[i]);
+        dp_1_0 = max(dp_1_0,dp_1_1 + prices[i]);
+        dp_1_1 = max(dp_1_1, - prices[i]);
+    }
+    return max(dp_1_0,dp_2_0);
+}
 
+int Algorithm::maxProfit4(int k, vector<int> &prices) {
+    if(prices.empty()) return 0;
+    if(k>=prices.size()/2)
+        return maxProfit3(prices);
+    int sSize = prices.size();
+    vector<vector<vector<int>>> dp(sSize,vector<vector<int>>(k + 1,vector<int>(2,0)));
+    for(int i = 0;i<sSize;++i){
+        for(int j = k;j>0;--j){
+            if(i == 0){
+                dp[0][j][0] = 0;
+                dp[0][j][1] = -prices[0];
+                continue;
+            }
+            dp[i][j][0] = max(dp[i-1][j][0],dp[i-1][j][1] + prices[i]);
+            dp[i][j][1] = max(dp[i-1][j][1],dp[i-1][j-1][0] - prices[i]);
+        }
+    }
+    return dp[sSize - 1][k][0];
+}
+
+vector<int> Algorithm::countSmaller(vector<int> &nums) {
+    int sSize = nums.size();
+    vector<int> res(sSize,0);
+    vector<int> index(sSize,0);
+    for(int i = 0;i<sSize;++i) index[i] = i;
+    mergeCountSmaller(nums,index,res,0,sSize - 1);
+    return res;
+}
+
+void Algorithm::mergeCountSmaller(vector<int> &nums,vector<int> &index,vector<int> &res,int l,int r){
+    if(l>=r){
+        return;
+    }
+    int mid = l + (r - l)/2;
+    mergeCountSmaller(nums,index,res,l,mid);
+    mergeCountSmaller(nums,index,res,mid + 1,r);
+    vector<int> tmp(r - l + 1);
+    int i = l,j = mid + 1;
+    int pos = l;
+    while (i <= mid && j <= r){
+        if(nums[index[j]] < nums[index[i]]){
+            res[index[i]] += r - j + 1;
+            tmp[pos] = index[i];
+            i++;
+        }
+        else{
+            tmp[pos] = index[j];
+            j++;
+        }
+        pos++;
+    }
+    while (i <= mid){
+        tmp[pos++] = index[i++];
+    }
+    while (j <= r){
+        tmp[pos++] = index[j++];
+    }
+    std::copy(tmp.begin(),tmp.end(),index.begin() + l);
+}
+
+int Algorithm::calculateMinimumHP(vector<vector<int>> &dungeon) {
+    int row = dungeon.size(), col = dungeon[0].size();
+    dungeon[row - 1][col - 1] = -dungeon[row - 1][col - 1]<0?0:-dungeon[row - 1][col - 1];
+    for (int i = col-2; i >= 0; --i)
+        dungeon[row - 1][i] = max(0, dungeon[row - 1][i + 1]) - dungeon[row - 1][i];
+    for (int i = row-2; i >= 0; --i)
+        dungeon[i][col - 1] = max(0, dungeon[i + 1][col - 1]) - dungeon[i][col - 1];
+    for (int i = row - 2; i >= 0; --i) {
+        for (int j = col-2; j >= 0; --j)
+            dungeon[i][j] = max(0, min(dungeon[i][j + 1], dungeon[i + 1][j]))- dungeon[i][j];
+    }
+    return dungeon[0][0]<0?1:dungeon[0][0]+1;
+}
+
+int Algorithm::numIdenticalPairs(vector<int> &nums) {
+    int sSize = nums.size();
+    vector<vector<int>> tmp(101);
+    for(int i = 0;i<sSize;++i){
+        tmp[nums[i]].push_back(i);
+    }
+    int ans = 0;
+    for(int i = 0;i<=100;++i){
+        if(tmp[i].empty()) continue;
+        int len = tmp[i].size();
+        ans += len*(len - 1)/2;
+    }
+    return ans;
+}
+
+int Algorithm::numSub(string s) {
+    if(s.empty()) return 0;
+    vector<long long> dp(s.size() + 1);
+    dp[0] = 0;
+    int index = 0;
+    for(int i = 1;i<=s.size();++i){
+        if(s[i - 1] != '1'){
+            dp[i] = dp[i -1];
+            index = i;
+        }
+        else{
+            int n = i - index;
+            dp[i]  = dp[i - 1] + n;
+        }
+    }
+    return dp[s.size()] % (1000000007);
+}
+
+double Algorithm::maxProbability(int n, vector<vector<int>> &edges, vector<double> &succProb, int start, int end) {
+    /*vector<vector<double>> adjacency(n,vector<double>(n,0.0));
+    //构建邻接图
+    for(int i = 0;i<edges.size();++i){
+        adjacency[edges[i][0]][edges[i][1]] = succProb[i];
+        adjacency[edges[i][1]][edges[i][0]] = succProb[i];
+    }
+    int count = 1;
+    vector<std::pair<double,bool>> dis(n);
+    for(int i = 0;i<n;++i){
+        dis[i].first = adjacency[start][i];
+        dis[i].second = false;
+    }
+    dis[start].first = 1.0;
+    dis[start].second = true;
+    while (count != n){
+        double iMax = 0.0;
+        int tmp = -1;
+        for(int i = 0;i<n;++i){
+            if(!dis[i].second && dis[i].first > iMax){
+                iMax = dis[i].first;
+                tmp = i;
+            }
+        }
+        dis[tmp].second = true;
+        ++count;
+        for(int i = 0;i<n;++i){
+            if(!dis[i].second && dis[tmp].first * adjacency[tmp][i] > dis[i].first){
+                dis[i].first = dis[tmp].first * adjacency[tmp][i];
+            }
+        }
+    }
+    return dis[end].first;*/
+
+    vector<vector<pair<double,int>>> graph (n,vector<pair<double,int>>());
+    for (int i = 0; i < edges.size(); ++i) {
+        auto e = edges[i];
+        graph[e[0]].push_back({succProb[i],e[1]});
+        graph[e[1]].push_back({succProb[i],e[0]});
+    }
+    vector<int> visited(n,0);
+    priority_queue<pair<double,int>> q;
+    q.push({1,start});
+    while(!q.empty()) {
+        auto p = q.top();
+        q.pop();
+        auto curProb = p.first;
+        auto curPos = p.second;
+        if (visited[curPos]) continue;
+        visited[curPos] = 1;
+        if (curPos == end) return curProb;
+        for ( auto next : graph[curPos]){
+            double nextProb = next.first;
+            int nextPos = next.second;
+            if (visited[nextPos]) continue;
+            q.push({curProb*nextProb,nextPos});
+        }
+    }
+    return 0;
+}
 
 
 

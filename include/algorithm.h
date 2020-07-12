@@ -12,6 +12,8 @@
 #include <unordered_map>
 #include <set>
 #include <unordered_set>
+#include <math.h>
+#include <algorithm>
 
 using namespace std;
 
@@ -92,8 +94,21 @@ public:
     int uniquePathsWithObstacles(vector<vector<int>>& obstacleGrid);//不同路径2
     bool hasPathSum(TreeNode* root, int sum);//路径总和
     vector<int> divingBoard(int shorter, int longer, int k);//跳水板
+    int respace(vector<string>& dictionary, string sentence);//恢复空格
+    int maxProfit_freeze(vector<int>& prices);//买卖股票最佳时机包含冷冻期
+    int maxProfit(vector<int>& prices);//买卖股票最佳时机
+    int maxProfit2(vector<int>& prices);//买卖股票最佳时机 多次买卖股票
+    int maxProfit3(vector<int>& prices);//买卖股票最佳时机 最多两次买卖股票
+    int maxProfit4(int k,vector<int>& prices);//买卖股票最佳时机 最多k次买卖股票
+    vector<int> countSmaller(vector<int>& nums);//计算右侧小于当前元素的个数
+    int calculateMinimumHP(vector<vector<int>>& dungeon);//地下城游戏
+    int numIdenticalPairs(vector<int>& nums);//好数对的个数
+    int numSub(string s);//仅含 1 的子串数
+    double maxProbability(int n, vector<vector<int>>& edges, vector<double>& succProb, int start, int end);//概率最大的路径
 
 private:
+
+    void back_respace(unordered_set<string> &dictionary, string &sentence, int wordLen, int x,int num);
     bool back_hasPathSum(TreeNode *node, int sum, int ans);
     void CountPalin(const string& s,int l,int r);
     bool check_searchMatrix(vector<vector<int>>& matrix,int mid,int i,int j);
@@ -104,6 +119,8 @@ private:
     void buildMaxHeap(vector<int>& a,int heapSize);
 private:
     int m_int;
+
+    void mergeCountSmaller(vector<int> &nums, vector<int> &index, vector<int> &res, int l, int r);
 };
 
 #endif
