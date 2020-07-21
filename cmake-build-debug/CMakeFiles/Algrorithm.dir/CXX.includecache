@@ -34,6 +34,16 @@ math.h
 algorithm
 -
 
+/Users/surpeli/CLionProjects/Algorithm/main.cpp
+iostream
+-
+vector
+-
+string
+-
+include/algorithm.h
+/Users/surpeli/CLionProjects/Algorithm/include/algorithm.h
+
 /Users/surpeli/CLionProjects/Algorithm/src/algorithm.cpp
 iostream
 -

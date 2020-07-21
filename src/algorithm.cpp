@@ -639,6 +639,119 @@ double Algorithm::maxProbability(int n, vector<vector<int>> &edges, vector<doubl
     return 0;
 }
 
+vector<int> Algorithm::intersect(vector<int> &nums1, vector<int> &nums2) {
+    if(nums1.size() < nums2.size())
+        return intersect(nums2,nums1);
+    unordered_map<int,int> aMap;
+    vector<int> ans;
+    for(const auto& n : nums2) aMap[n]++;
+    for(const auto& n : nums1){
+        if(aMap.find(n) != aMap.end() && aMap[n] != 0){
+            ans.push_back(n);
+            aMap[n]--;
+        }
+    }
+    return ans;
+}
+
+int Algorithm::minimumTotal(vector<vector<int>> &triangle) {
+    if(triangle.empty()) return 0;
+    int row = triangle.size();
+    for(int i = row - 2;i>=0;--i){
+        int col = triangle[i].size();
+        for(int j = 0;j<col;++j){
+            triangle[i][j] += min(triangle[i + 1][j],triangle[i + 1][j + 1]);
+        }
+    }
+    return triangle[0][0];
+}
+
+int Algorithm::numTree(int n) {
+    vector<int> dp(n + 1,0);
+    dp[0] = 1;
+    dp[1] = 1;
+    for(int i = 2;i<=n;++i){
+        for(int j = 1;j<i + 1;++j){
+            dp[i] += dp[j - 1]*dp[i - j];
+        }
+    }
+    return dp[n];
+}
+
+bool Algorithm::isBipartite(vector<vector<int>> &graph) {
+    int unColor = 0;
+    int red = 1;
+    int green = 2;
+    vector<int> isNodeColor(graph.size(),0);
+    for(int i = 0;i<graph.size();++i){
+        if(isNodeColor[i] == unColor){
+            queue<int> q;
+            q.push(i);
+            isNodeColor[i] = red;
+            while (!q.empty()){
+                int node = q.front();
+                q.pop();
+                int color = isNodeColor[node] == red ? green : red;
+                for(int j = 0;j<graph[node].size();++j){
+                    if(isNodeColor[graph[node][j]] == unColor) {
+                        isNodeColor[graph[node][j]] = color;
+                        q.push(graph[node][j]);
+                    }
+                    else if(isNodeColor[j] != color)
+                        return false;
+                }
+            }
+        }
+    }
+    return true;
+}
+
+int Algorithm::searchInsert(vector<int> &nums, int target) {
+    int l = 0;
+    int r = nums.size() - 1;
+    while (l<=r){
+        int mid = l + (r - l)/2;
+        if(nums[mid] == target)
+            return mid;
+        if(nums[mid] < target)
+            l = mid + 1;
+        else if(nums[mid] > target)
+            r = mid - 1;
+    }
+    return l;
+}
+
+vector<TreeNode *> Algorithm::generateTrees(int n) {
+    if(!n) return vector<TreeNode*>();
+    return back_generateTrees(1,n);
+}
+
+vector<TreeNode *> Algorithm::back_generateTrees(int l, int r) {
+    vector<TreeNode*> ans;
+    if(l > r){
+        ans.push_back(nullptr);
+        return ans;
+    }
+    for(int i = l;i<=r;++i){
+        vector<TreeNode*> leftVt = back_generateTrees(l,i - 1);
+        vector<TreeNode*> rightVt = back_generateTrees(i + 1,r);
+        for(auto left : leftVt){
+            for(auto right : rightVt){
+                TreeNode* node = new TreeNode(i);
+                node->left = left;
+                node->right = right;
+                ans.push_back(node);
+            }
+        }
+    }
+    return ans;
+}
+
+
+
+
+
+
 
 
 

@@ -105,9 +105,15 @@ public:
     int numIdenticalPairs(vector<int>& nums);//好数对的个数
     int numSub(string s);//仅含 1 的子串数
     double maxProbability(int n, vector<vector<int>>& edges, vector<double>& succProb, int start, int end);//概率最大的路径
+    vector<int> intersect(vector<int>& nums1, vector<int>& nums2);//两个数组的交集
+    int minimumTotal(vector<vector<int>>& triangle);//三角形最小路径和
+    int numTree(int n);//不同的二叉搜索树
+    bool isBipartite(vector<vector<int>>& graph);//判断二分图
+    int searchInsert(vector<int>& nums, int target);//搜索插入位置
+    vector<TreeNode*> generateTrees(int n);//不同的二叉搜索树2
 
 private:
-
+    vector<TreeNode*> back_generateTrees(int l,int r);
     void back_respace(unordered_set<string> &dictionary, string &sentence, int wordLen, int x,int num);
     bool back_hasPathSum(TreeNode *node, int sum, int ans);
     void CountPalin(const string& s,int l,int r);
