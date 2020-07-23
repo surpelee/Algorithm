@@ -17,6 +17,12 @@
 
 using namespace std;
 
+struct ListNode{
+    int val;
+    ListNode* next;
+    ListNode(int _val):val(_val),next(nullptr){}
+};
+
 struct TreeNode{
     int val;
     TreeNode* left;
@@ -111,6 +117,8 @@ public:
     bool isBipartite(vector<vector<int>>& graph);//判断二分图
     int searchInsert(vector<int>& nums, int target);//搜索插入位置
     vector<TreeNode*> generateTrees(int n);//不同的二叉搜索树2
+    int minArray(vector<int>& numbers);//旋转数组的最小数字
+    int minPathSum(vector<vector<int>>& grid);//最小路径和
 
 private:
     vector<TreeNode*> back_generateTrees(int l,int r);
@@ -125,8 +133,16 @@ private:
     void buildMaxHeap(vector<int>& a,int heapSize);
 private:
     int m_int;
+    vector<int> m_intVt;
 
     void mergeCountSmaller(vector<int> &nums, vector<int> &index, vector<int> &res, int l, int r);
+
+public:
+    bool KMPString(const string& s,const string& t);
+    ListNode* reverseList(ListNode* head);
+    vector<int> preorderTraversal(TreeNode* root);
+    void back_Preorder(TreeNode* root);
+    vector<int> inorderTraversal(TreeNode* root);
 };
 
 #endif

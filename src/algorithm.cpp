@@ -747,6 +747,124 @@ vector<TreeNode *> Algorithm::back_generateTrees(int l, int r) {
     return ans;
 }
 
+int Algorithm::minArray(vector<int> &numbers) {
+    int sSize = numbers.size();
+    int l = 0,r = sSize - 1;
+    while(l<r){
+        int mid = l + (r - l)/2;
+        if(numbers[r] > numbers[l]) return numbers[l];
+        if(numbers[mid] >= numbers[l] && numbers[mid] > numbers[r]){
+            l = mid + 1;
+        }else if(numbers[mid] <= numbers[r] && numbers[mid] < numbers[l]){
+            r = mid;
+        }else{
+            l++;
+            r--;
+        }
+    }
+    return numbers[l];
+}
+
+bool Algorithm::KMPString(const string &s, const string &t) {
+    int sSize = s.size();
+    int tSize = t.size();
+    vector<int> next(tSize,0);
+    for(int i = 1,k = 0;i<tSize;++i){
+        while(k>0 && t[i] != t[k])
+            k = next[k - 1];
+        if(t[i] == t[k])
+            k++;
+        next[i] = k;
+    }
+    for(int i = 0,k = 0;i<sSize;++i){
+        while(k>0 && t[k] != s[i])
+            k = next[k - 1];
+        if(t[k] == s[i])
+            k++;
+        if(k == tSize) return true;
+    }
+    return false;
+}
+
+ListNode *Algorithm::reverseList(ListNode *head) {
+    /*if(head == nullptr || head->next == nullptr)
+        return head;
+    ListNode* tmp = reverseList(head->next);
+    head->next->next = head;
+    head->next = nullptr;
+    return tmp;*/
+    ListNode* pre = nullptr;
+    ListNode* cur = head;
+    while(cur){
+        ListNode* tmp = cur->next;
+        cur->next = pre;
+        pre = cur;
+        cur = tmp;
+    }
+    return pre;
+}
+
+vector<int> Algorithm::preorderTraversal(TreeNode *root) {
+    /*m_intVt = vector<int>();
+    back_Preorder(root);
+    return m_intVt;*/
+    vector<int> ans;
+    stack<TreeNode*> s;
+    s.push(root);
+    while(!s.empty()){
+        TreeNode* tmp = s.top();
+        s.pop();
+        ans.push_back(tmp->val);
+        if(tmp->right) s.push(tmp->right);
+        if(tmp->left) s.push(tmp->left);
+    }
+    return ans;
+}
+
+void Algorithm::back_Preorder(TreeNode *root) {
+    if(root == nullptr) return;
+    m_intVt.push_back(root->val);
+    back_Preorder(root->left);
+    back_Preorder(root->right);
+}
+
+vector<int> Algorithm::inorderTraversal(TreeNode *root) {
+    if(root == nullptr)
+        return {};
+    stack<TreeNode*> s;
+    while(!s.empty()||root){
+        if(root){
+            s.push(root);
+            root = root->left;
+        }else{
+            root = s.top();
+            s.pop();
+            m_intVt.push_back(root->val);
+            root = root->right;
+        }
+    }
+    return m_intVt;
+}
+
+int Algorithm::minPathSum(vector<vector<int>> &grid) {
+    if(grid.empty()) return 0;
+    int m = grid.size();
+    int n = grid[0].size();
+    for(int i = 1;i<n;++i){
+        grid[0][i] += grid[0][i - 1];
+    }
+    for(int i = 1;i<m;++i){
+        grid[i][0] += grid[i - 1][0];
+    }
+    for(int i = 1;i<m;++i){
+        for(int j = 1;j<n;++j){
+            grid[i][j] += min(grid[i - 1][j],grid[i][j - 1]);
+        }
+    }
+    return grid[m - 1][n - 1];
+}
+
+
 
 
 
