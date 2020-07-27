@@ -119,6 +119,8 @@ public:
     vector<TreeNode*> generateTrees(int n);//不同的二叉搜索树2
     int minArray(vector<int>& numbers);//旋转数组的最小数字
     int minPathSum(vector<vector<int>>& grid);//最小路径和
+    bool divisorGame(int N);//除数博弈
+    bool isSubsequence(string s, string t);//判断子序列
 
 private:
     vector<TreeNode*> back_generateTrees(int l,int r);

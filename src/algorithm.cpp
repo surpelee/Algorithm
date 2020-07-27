@@ -864,6 +864,22 @@ int Algorithm::minPathSum(vector<vector<int>> &grid) {
     return grid[m - 1][n - 1];
 }
 
+bool Algorithm::divisorGame(int N) {
+    return N % 2 ? false : true;
+}
+
+bool Algorithm::isSubsequence(string s, string t) {
+    int k = 0;
+    for(int i = 0;i<t.size();++i){
+        if(k == s.size()) return true;
+        if(s[k] == t[i]){
+            ++k;
+        }
+    }
+    if(k == s.size()) return true;
+    return false;
+}
+
 
 
 
