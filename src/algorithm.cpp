@@ -880,6 +880,74 @@ bool Algorithm::isSubsequence(string s, string t) {
     return false;
 }
 
+int Algorithm::maxDepth(TreeNode *root) {
+    if(!root) return 0;
+    int ans = 0;
+    queue<TreeNode*> q;
+    q.push(root);
+    while(!q.empty()){
+        int n = q.size();
+        ++ans;
+        for(int i = 0;i<n;++i){
+            TreeNode* node = q.front();
+            q.pop();
+            if(node->left) q.push(node->left);
+            if(node->right) q.push(node->right);
+        }
+    }
+    return ans;
+    //递归
+    //return root ? max(maxDepth(root->left),maxDepth(root->right)) + 1 : 0;
+}
+
+int Algorithm::integerBreak(int n) {
+    /*if(n<3) return 1;
+    if(n == 3) return 2;
+    int Three = n/3;
+    int ans = 1;
+    for(int i = 0;i<Three;++i)
+        ans *= 3;
+    int rest = n%3;
+    if(rest == 1){
+        ans /= 3;
+        ans *= 4;
+    }else if(rest == 2)
+        ans *= 2;
+    return ans;*/
+    vector<int> dp(n + 1,0);
+    for(int i = 2;i<=n;++i){
+        for(int j = 1;j<i;++j)
+            dp[i] = max({j * (i - j),j * dp[i - j],dp[j]});
+    }
+    return dp[n];
+}
+
+int Algorithm::findMagicIndex(vector<int> &nums) {
+    /*for(int i = 0;i<nums.size();++i){
+        if(nums[i] == i) return i;
+    }
+    return -1;*/
+    return back_findMagicIndex(nums,0,nums.size() - 1);
+}
+
+int Algorithm::back_findMagicIndex(vector<int> &nums, int l, int r) {
+    if(l>r)
+        return -1;
+    int mid = l + (r - l)/2;
+    int left = back_findMagicIndex(nums,l,mid - 1);
+    if(left > -1)
+        return left;
+    else if(nums[mid] == mid)
+        return mid;
+    return back_findMagicIndex(nums,mid + 1,r);
+}
+
+
+
+
+
+
+
 
 
 

@@ -121,8 +121,12 @@ public:
     int minPathSum(vector<vector<int>>& grid);//最小路径和
     bool divisorGame(int N);//除数博弈
     bool isSubsequence(string s, string t);//判断子序列
+    int maxDepth(TreeNode* root);//二叉树的最大深度
+    int integerBreak(int n);//整数拆分
+    int findMagicIndex(vector<int>& nums);//魔术索引
 
 private:
+    int back_findMagicIndex(vector<int>& nums,int l,int r);//魔术索引
     vector<TreeNode*> back_generateTrees(int l,int r);
     void back_respace(unordered_set<string> &dictionary, string &sentence, int wordLen, int x,int num);
     bool back_hasPathSum(TreeNode *node, int sum, int ans);
@@ -145,6 +149,8 @@ public:
     vector<int> preorderTraversal(TreeNode* root);
     void back_Preorder(TreeNode* root);
     vector<int> inorderTraversal(TreeNode* root);
+
+
 };
 
 #endif
